@@ -1,15 +1,16 @@
 from django.db import models
 
 class Usuario(models.Model):
+    TIPOS = [
+        ("ADMIN", "Administrador"),
+        ("JEFE", "Jefe"),
+        ("EMPLEADO", "Empleado"),
+    ]
+
+    tipo = models.CharField(max_length=20, choices=TIPOS)
     nombre = models.CharField(max_length=100)
-    email = models.EmailField()
-    rol = models.CharField(max_length=50)
+    usuario = models.CharField(max_length=50, unique=True)
+    contraseña = models.CharField(max_length=100)
 
-class Reserva(models.Model):
-    fecha = models.DateField()
-    hora = models.TimeField()
-    numero_personas = models.IntegerField()
-
-class Inventario(models.Model):
-    nombre_producto = models.CharField(max_length=100)
-    cantidad = models.IntegerField()
+    def __str__(self):
+        return f"{self.nombre} ({self.tipo})"

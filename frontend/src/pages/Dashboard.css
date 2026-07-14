@@ -129,3 +129,9 @@
 .dashboard-button.purple {
   background: linear-gradient(135deg, #7c3aed, #5b21b6);
 }
+
+
+.dashboard-button.orange {
+  background: linear-gradient(135deg, #b45309, #92400e);
+  color: #ffffff;
+}

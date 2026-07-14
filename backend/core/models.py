@@ -96,3 +96,31 @@ class Mensaje(models.Model):
 
     def __str__(self):
         return f"Mensaje de {self.idRemitente.nombre} para {self.idDestinatario.nombre}"
+
+
+
+class Turno(models.Model):
+    fecha = models.DateField()
+    horaInicio = models.TimeField()
+    horaFin = models.TimeField()
+    idEmpleado = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        related_name="turnos_asignados",
+    )
+
+    def asignarEmpleado(self, usuario):
+        self.idEmpleado = usuario
+        self.save()
+
+    def modificarHorario(self, fecha=None, horaInicio=None, horaFin=None):
+        if fecha is not None:
+            self.fecha = fecha
+        if horaInicio is not None:
+            self.horaInicio = horaInicio
+        if horaFin is not None:
+            self.horaFin = horaFin
+        self.save()
+
+    def __str__(self):
+        return f"Turno de {self.idEmpleado.nombre} - {self.fecha} {self.horaInicio}-{self.horaFin}"

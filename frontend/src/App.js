@@ -6,6 +6,7 @@ import Inventario from "./pages/Inventario";
 import Reservas from "./pages/Reservas";
 import ReservasRealizadas from "./pages/ReservasRealizadas";
 import Mensajes from "./pages/Mensajes";
+import Turnos from "./pages/Turnos";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/reservas" element={<Reservas />} />
         <Route path="/reservas-realizadas" element={<ReservasRealizadas />} />
         <Route path="/mensajes" element={<Mensajes />} />
+        <Route path="/turnos" element={<Turnos />} />
       </Routes>
     </BrowserRouter>
   );

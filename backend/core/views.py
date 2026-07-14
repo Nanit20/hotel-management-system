@@ -8,7 +8,7 @@ from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from core.models import CodigoReserva, Inventario, Mensaje, Reserva, Usuario
+from core.models import CodigoReserva, Inventario, Mensaje, Reserva, Turno, Usuario
 
 
 @api_view(["POST"])
@@ -375,3 +375,111 @@ def mensaje_marcar_leido(request, mensaje_id):
 
     mensaje.marcarLeido()
     return Response(mensaje_to_dict(mensaje))
+
+
+
+def turno_to_dict(turno):
+    return {
+        "id": turno.id,
+        "fecha": turno.fecha,
+        "horaInicio": turno.horaInicio.strftime("%H:%M"),
+        "horaFin": turno.horaFin.strftime("%H:%M"),
+        "idEmpleado": turno.idEmpleado.id,
+        "nombreEmpleado": turno.idEmpleado.nombre,
+        "tipoEmpleado": turno.idEmpleado.tipo,
+    }
+
+
+def puede_modificar_turnos(request):
+    return get_user_type(request) in ["ADMIN", "JEFE"]
+
+
+@api_view(["GET", "POST"])
+def turnos_list_create(request):
+    if not es_usuario_interno(request):
+        return Response({"error": "No tienes permisos para consultar los turnos"}, status=403)
+
+    if request.method == "GET":
+        turnos = Turno.objects.all().select_related("idEmpleado").order_by("fecha", "horaInicio", "id")
+        return Response([turno_to_dict(turno) for turno in turnos])
+
+    if not puede_modificar_turnos(request):
+        return Response({"error": "No tienes permisos para modificar los turnos"}, status=403)
+
+    empleado_id = request.data.get("idEmpleado")
+    fecha_valor = request.data.get("fecha")
+    hora_inicio_valor = request.data.get("horaInicio")
+    hora_fin_valor = request.data.get("horaFin")
+
+    if not empleado_id or not fecha_valor or not hora_inicio_valor or not hora_fin_valor:
+        return Response({"error": "Empleado, fecha, hora de inicio y hora de fin son obligatorios"}, status=400)
+
+    try:
+        empleado = Usuario.objects.get(id=empleado_id, tipo="EMPLEADO")
+    except (Usuario.DoesNotExist, ValueError):
+        return Response({"error": "Empleado no válido"}, status=400)
+
+    try:
+        fecha = date.fromisoformat(fecha_valor)
+        hora_inicio = time.fromisoformat(hora_inicio_valor)
+        hora_fin = time.fromisoformat(hora_fin_valor)
+    except (TypeError, ValueError):
+        return Response({"error": "Fecha u horas no válidas"}, status=400)
+
+    if hora_fin <= hora_inicio:
+        return Response({"error": "La hora de fin debe ser posterior a la hora de inicio"}, status=400)
+
+    turno = Turno.objects.create(
+        idEmpleado=empleado,
+        fecha=fecha,
+        horaInicio=hora_inicio,
+        horaFin=hora_fin,
+    )
+
+    return Response(turno_to_dict(turno), status=201)
+
+
+@api_view(["PUT", "DELETE"])
+def turno_detail(request, turno_id):
+    if not puede_modificar_turnos(request):
+        return Response({"error": "No tienes permisos para modificar los turnos"}, status=403)
+
+    try:
+        turno = Turno.objects.select_related("idEmpleado").get(id=turno_id)
+    except Turno.DoesNotExist:
+        return Response({"error": "Turno no encontrado"}, status=404)
+
+    if request.method == "DELETE":
+        turno.delete()
+        return Response({"mensaje": "Turno eliminado correctamente"})
+
+    empleado_id = request.data.get("idEmpleado")
+    fecha_valor = request.data.get("fecha")
+    hora_inicio_valor = request.data.get("horaInicio")
+    hora_fin_valor = request.data.get("horaFin")
+
+    if not empleado_id or not fecha_valor or not hora_inicio_valor or not hora_fin_valor:
+        return Response({"error": "Empleado, fecha, hora de inicio y hora de fin son obligatorios"}, status=400)
+
+    try:
+        empleado = Usuario.objects.get(id=empleado_id, tipo="EMPLEADO")
+    except (Usuario.DoesNotExist, ValueError):
+        return Response({"error": "Empleado no válido"}, status=400)
+
+    try:
+        fecha = date.fromisoformat(fecha_valor)
+        hora_inicio = time.fromisoformat(hora_inicio_valor)
+        hora_fin = time.fromisoformat(hora_fin_valor)
+    except (TypeError, ValueError):
+        return Response({"error": "Fecha u horas no válidas"}, status=400)
+
+    if hora_fin <= hora_inicio:
+        return Response({"error": "La hora de fin debe ser posterior a la hora de inicio"}, status=400)
+
+    turno.idEmpleado = empleado
+    turno.fecha = fecha
+    turno.horaInicio = hora_inicio
+    turno.horaFin = hora_fin
+    turno.save()
+
+    return Response(turno_to_dict(turno))

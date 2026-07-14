@@ -11,6 +11,8 @@ from .views import (
     reserva_update_estado,
     reservas_list,
     validar_codigo_reserva,
+    turno_detail,
+    turnos_list_create,
     usuarios_list,
 )
 
@@ -26,4 +28,6 @@ urlpatterns = [
     path("usuarios/", usuarios_list),
     path("mensajes/", mensajes_list_create),
     path("mensajes/<int:mensaje_id>/leido/", mensaje_marcar_leido),
+    path("turnos/", turnos_list_create),
+    path("turnos/<int:turno_id>/", turno_detail),
 ]

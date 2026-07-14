@@ -75,6 +75,13 @@ export default function Dashboard() {
             Mensajería interna
           </button>
 
+          <button
+            className="dashboard-button primary orange"
+            onClick={() => navigate("/turnos")}
+          >
+            Turnos
+          </button>
+
           {puedeVerReservas && (
             <button
               className="dashboard-button primary green"

@@ -3,6 +3,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Inventario from "./pages/Inventario";
+import Reservas from "./pages/Reservas";
+import ReservasRealizadas from "./pages/ReservasRealizadas";
 
 export default function App() {
   return (
@@ -12,6 +14,8 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/inventario" element={<Inventario />} />
+        <Route path="/reservas" element={<Reservas />} />
+        <Route path="/reservas-realizadas" element={<ReservasRealizadas />} />
       </Routes>
     </BrowserRouter>
   );

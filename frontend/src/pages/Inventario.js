@@ -152,9 +152,14 @@ export default function Inventario() {
           )}
         </div>
 
-        <button className="back-button" onClick={() => navigate("/dashboard")}>
-          Volver al dashboard
-        </button>
+        <div className="header-actions">
+          <button className="home-button-inventory" onClick={() => navigate("/")}>
+            Página principal
+          </button>
+          <button className="back-button" onClick={() => navigate("/dashboard")}>
+            Volver al dashboard
+          </button>
+        </div>
       </div>
 
       {puedeModificar && (

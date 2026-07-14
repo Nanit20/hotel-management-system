@@ -34,6 +34,10 @@ export default function Login() {
 
   return (
     <div className="login-container">
+      <button className="login-home-button" onClick={() => navigate("/")}> 
+        Volver a la página principal
+      </button>
+
       <div className="login-card">
         <h2 className="login-title">Hotel Management</h2>
         <p className="login-subtitle">Inicia sesión en tu cuenta</p>

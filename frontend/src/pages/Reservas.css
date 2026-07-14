@@ -1,0 +1,164 @@
+.reservas-container {
+  min-height: 100vh;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8fafc, #dbeafe);
+  font-family: "Segoe UI", sans-serif;
+  position: relative;
+}
+
+.reservas-home-button {
+  position: fixed;
+  top: 22px;
+  left: 22px;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  background: #e2e8f0;
+  color: #0f172a;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reservas-home-button:hover {
+  background: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+.reservas-card {
+  width: min(680px, 100%);
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+  padding: 38px;
+}
+
+.reservas-card h1 {
+  margin: 0 0 10px;
+  color: #0f172a;
+  text-align: center;
+}
+
+.reservas-subtitle {
+  margin: 0 0 28px;
+  color: #475569;
+  text-align: center;
+}
+
+.codigo-form,
+.reserva-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.codigo-form input,
+.reserva-grid input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 13px 14px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.codigo-form input {
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+.codigo-form button,
+.reserva-actions button {
+  border: none;
+  border-radius: 10px;
+  padding: 13px 18px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.codigo-form button:hover:not(:disabled),
+.reserva-actions button:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.codigo-form button:disabled,
+.reserva-actions button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.codigo-validado {
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.reserva-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.reserva-grid label {
+  color: #334155;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reserva-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.reserva-actions .cancelar-codigo-button {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.reserva-actions .cancelar-codigo-button:hover {
+  background: #cbd5e1;
+}
+
+.reserva-error {
+  margin: 18px 0 0;
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.reserva-success {
+  margin: 18px 0 0;
+  color: #166534;
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .reserva-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,186 @@
+.reservas-realizadas-container {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 32px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.reservas-realizadas-header {
+  width: min(1100px, 100%);
+  margin: 0 auto 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.reservas-realizadas-header h1 {
+  margin: 0 0 8px;
+  color: #0f172a;
+}
+
+.reservas-realizadas-header p {
+  margin: 0;
+  color: #475569;
+}
+
+.reservas-realizadas-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.rr-home-button,
+.rr-dashboard-button {
+  border: none;
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rr-home-button {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.rr-dashboard-button {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.rr-home-button:hover,
+.rr-dashboard-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
+}
+
+.reservas-realizadas-card {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+}
+
+.reservas-realizadas-card h2 {
+  margin: 0 0 18px;
+  color: #0f172a;
+}
+
+.rr-table-wrapper {
+  overflow-x: auto;
+}
+
+.rr-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rr-table th,
+.rr-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.rr-table th {
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.9rem;
+}
+
+.rr-code {
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: 1px;
+}
+
+.rr-estado {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.rr-estado-pendiente {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.rr-estado-confirmada {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.rr-estado-cancelada {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.rr-actions-cell {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rr-confirm-button,
+.rr-cancel-button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rr-confirm-button {
+  background: #16a34a;
+}
+
+.rr-cancel-button {
+  background: #dc2626;
+}
+
+.rr-confirm-button:hover:not(:disabled),
+.rr-cancel-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.rr-confirm-button:disabled,
+.rr-cancel-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.rr-info {
+  color: #475569;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.rr-error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 14px;
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .reservas-realizadas-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

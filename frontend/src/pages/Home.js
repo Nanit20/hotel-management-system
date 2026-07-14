@@ -9,15 +9,24 @@ export default function Home() {
       <h1 className="home-title">Bienvenido al hotel</h1>
 
       <p className="home-subtitle">
-        Realice el inicio de sesión para continuar
+        Inicia sesión o realiza una reserva con un código válido
       </p>
 
-      <button
-        className="home-button"
-        onClick={() => navigate("/login")}
-      >
-        Iniciar sesión
-      </button>
+      <div className="home-actions">
+        <button
+          className="home-button"
+          onClick={() => navigate("/login")}
+        >
+          Iniciar sesión
+        </button>
+
+        <button
+          className="home-button reserve"
+          onClick={() => navigate("/reservas")}
+        >
+          Realizar reserva
+        </button>
+      </div>
     </div>
   );
 }

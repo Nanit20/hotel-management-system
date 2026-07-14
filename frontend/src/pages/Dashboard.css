@@ -125,3 +125,7 @@
   font-weight: 700;
   margin: 0;
 }
+
+.dashboard-button.purple {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+}

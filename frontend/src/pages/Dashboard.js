@@ -68,6 +68,13 @@ export default function Dashboard() {
             Ir al inventario
           </button>
 
+          <button
+            className="dashboard-button primary purple"
+            onClick={() => navigate("/mensajes")}
+          >
+            Mensajería interna
+          </button>
+
           {puedeVerReservas && (
             <button
               className="dashboard-button primary green"

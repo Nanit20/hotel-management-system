@@ -6,9 +6,12 @@ from .views import (
     inventario_detail,
     inventario_list_create,
     login,
+    mensaje_marcar_leido,
+    mensajes_list_create,
     reserva_update_estado,
     reservas_list,
     validar_codigo_reserva,
+    usuarios_list,
 )
 
 urlpatterns = [
@@ -20,4 +23,7 @@ urlpatterns = [
     path("reservas/crear/", crear_reserva),
     path("reservas/", reservas_list),
     path("reservas/<int:reserva_id>/estado/", reserva_update_estado),
+    path("usuarios/", usuarios_list),
+    path("mensajes/", mensajes_list_create),
+    path("mensajes/<int:mensaje_id>/leido/", mensaje_marcar_leido),
 ]

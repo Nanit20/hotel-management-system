@@ -2,11 +2,13 @@ import random
 import string
 from datetime import date, time, timedelta
 
+from django.db import models
+
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from core.models import CodigoReserva, Inventario, Reserva, Usuario
+from core.models import CodigoReserva, Inventario, Mensaje, Reserva, Usuario
 
 
 @api_view(["POST"])
@@ -279,3 +281,97 @@ def reserva_update_estado(request, reserva_id):
     reserva.save()
 
     return Response(reserva_to_dict(reserva))
+
+
+
+def usuario_to_dict(usuario):
+    return {
+        "id": usuario.id,
+        "tipo": usuario.tipo,
+        "nombre": usuario.nombre,
+        "usuario": usuario.usuario,
+    }
+
+
+def mensaje_to_dict(mensaje):
+    return {
+        "id": mensaje.id,
+        "contenido": mensaje.contenido,
+        "fecha": mensaje.fecha,
+        "leido": mensaje.leido,
+        "idRemitente": mensaje.idRemitente.id,
+        "nombreRemitente": mensaje.idRemitente.nombre,
+        "tipoRemitente": mensaje.idRemitente.tipo,
+        "idDestinatario": mensaje.idDestinatario.id,
+        "nombreDestinatario": mensaje.idDestinatario.nombre,
+        "tipoDestinatario": mensaje.idDestinatario.tipo,
+    }
+
+
+def es_usuario_interno(request):
+    return get_user_type(request) in ["ADMIN", "JEFE", "EMPLEADO"]
+
+
+@api_view(["GET"])
+def usuarios_list(request):
+    if not es_usuario_interno(request):
+        return Response({"error": "No tienes permisos para consultar usuarios"}, status=403)
+
+    usuarios = Usuario.objects.all().order_by("tipo", "nombre")
+    return Response([usuario_to_dict(usuario) for usuario in usuarios])
+
+
+@api_view(["GET", "POST"])
+def mensajes_list_create(request):
+    usuario_actual = get_user_from_header(request)
+
+    if not usuario_actual or not es_usuario_interno(request):
+        return Response({"error": "No tienes permisos para acceder a la mensajería"}, status=403)
+
+    if request.method == "GET":
+        if usuario_actual.tipo == "ADMIN":
+            mensajes = Mensaje.objects.all().select_related("idRemitente", "idDestinatario").order_by("-fecha")
+        else:
+            mensajes = Mensaje.objects.filter(
+                models.Q(idRemitente=usuario_actual) | models.Q(idDestinatario=usuario_actual)
+            ).select_related("idRemitente", "idDestinatario").order_by("-fecha")
+
+        return Response([mensaje_to_dict(mensaje) for mensaje in mensajes])
+
+    destinatario_id = request.data.get("idDestinatario")
+    contenido = str(request.data.get("contenido", "")).strip()
+
+    if not destinatario_id or not contenido:
+        return Response({"error": "Destinatario y contenido son obligatorios"}, status=400)
+
+    try:
+        destinatario = Usuario.objects.get(id=destinatario_id)
+    except (Usuario.DoesNotExist, ValueError):
+        return Response({"error": "El destinatario no existe"}, status=404)
+
+    mensaje = Mensaje.objects.create(
+        idRemitente=usuario_actual,
+        idDestinatario=destinatario,
+        contenido=contenido,
+    )
+
+    return Response(mensaje_to_dict(mensaje), status=201)
+
+
+@api_view(["PUT"])
+def mensaje_marcar_leido(request, mensaje_id):
+    usuario_actual = get_user_from_header(request)
+
+    if not usuario_actual or not es_usuario_interno(request):
+        return Response({"error": "No tienes permisos para modificar mensajes"}, status=403)
+
+    try:
+        mensaje = Mensaje.objects.get(id=mensaje_id)
+    except Mensaje.DoesNotExist:
+        return Response({"error": "Mensaje no encontrado"}, status=404)
+
+    if usuario_actual.tipo != "ADMIN" and mensaje.idDestinatario_id != usuario_actual.id:
+        return Response({"error": "Solo puedes marcar como leídos tus mensajes recibidos"}, status=403)
+
+    mensaje.marcarLeido()
+    return Response(mensaje_to_dict(mensaje))

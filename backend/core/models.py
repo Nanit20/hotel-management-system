@@ -73,3 +73,26 @@ class Reserva(models.Model):
 
     def __str__(self):
         return f"Reserva {self.codigoAcceso} - {self.fecha} {self.hora}"
+
+
+class Mensaje(models.Model):
+    contenido = models.TextField()
+    fecha = models.DateTimeField(auto_now_add=True)
+    leido = models.BooleanField(default=False)
+    idRemitente = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        related_name="mensajes_enviados",
+    )
+    idDestinatario = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        related_name="mensajes_recibidos",
+    )
+
+    def marcarLeido(self):
+        self.leido = True
+        self.save()
+
+    def __str__(self):
+        return f"Mensaje de {self.idRemitente.nombre} para {self.idDestinatario.nombre}"
